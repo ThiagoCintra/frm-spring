@@ -5,34 +5,40 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 public abstract class PageHelper {
 
-	private static HashMap<Class, Object> pages = new HashMap<>();
-	private static WebDriver thisDriver;
+	private static HashMap<Class, Object> pages = new HashMap<Class,Object>();
+	private static RemoteWebDriver driver;
 	
 	public static void setPage(Class clazz, Object bean) {
 		pages.put(clazz, bean);
 	}
 
 	public static Object getPage(Class name) {
-		return pages.get(name);
-	}
-	
-	public static void setDriverPage(WebDriver driver) {
-		for(Map.Entry<Class, Object> page : pages.entrySet()) {
-			try {
-				page.setValue(PageFactory.initElements(driver, page.getKey()));	
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
+		try {
+			Object page = pages.get(name);
+			initilizePage(page);
+			return page;
+		}catch(Exception e) {
+			System.out.println("ainda nao instanciou");
 		}
+		return name;
 	}
 	
-	public static WebDriver getDriver() {
-		return thisDriver;
+	public static void setDriver(RemoteWebDriver remoteDriver) {
+		driver = remoteDriver;
 	}
+	
+	public static RemoteWebDriver getDriver() {
+		return driver;
+	}
+	
+	private static void initilizePage(Object page) {
+		PageFactory.initElements(driver, page);
+	}
+
 }

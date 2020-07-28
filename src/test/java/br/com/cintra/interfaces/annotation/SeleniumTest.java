@@ -1,4 +1,4 @@
-package br.com.cintra.interfaces;
+package br.com.cintra.interfaces.annotation;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -28,5 +28,6 @@ import static org.springframework.test.context.TestExecutionListeners.MergeMode.
 public @interface SeleniumTest {
     Class<? extends RemoteWebDriver> driver() default ChromeDriver.class;
     String baseUrl() default "http://google.com.br";
-
+    String driverExe() default "webdriver.chrome.driver";
+    String drivePath();
 }

@@ -10,14 +10,18 @@ import org.springframework.core.Ordered;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 
-import br.com.cintra.interfaces.SeleniumTest;
+import br.com.cintra.interfaces.annotation.SeleniumTest;
 
+import static br.com.cintra.helper.PageHelper.setDriver;
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
 
 public class SeleniumTestExecutionListener extends AbstractTestExecutionListener {
 
-	private RemoteWebDriver driver;
-	private ApplicationContext context;
+	private static RemoteWebDriver driver;
+	private ApplicationContext context = null;
+	private SeleniumTest annotation;
+	private ConfigurableApplicationContext configurableApplicationContext;
+	private ConfigurableListableBeanFactory bf;
 
 	public int getOrder() {
 		return Ordered.HIGHEST_PRECEDENCE;
@@ -28,30 +32,51 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
 		if (driver != null) {
 			return;
 		}
-		context = testContext.getApplicationContext();
-		if (context instanceof ConfigurableApplicationContext) {
-			SeleniumTest annotation = findAnnotation(testContext.getTestClass(), SeleniumTest.class);
+		try {
+			if (context == null) {
+				this.annotation = findAnnotation(testContext.getTestClass(), SeleniumTest.class);
+				System.setProperty(annotation.driverExe(), annotation.drivePath());
+				context = testContext.getApplicationContext();
+				configurableApplicationContext = (ConfigurableApplicationContext) this.context;
+				bf = configurableApplicationContext.getBeanFactory();
+			}
 			driver = BeanUtils.instantiateClass(annotation.driver());
-			ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext) context;
-			ConfigurableListableBeanFactory bf = configurableApplicationContext.getBeanFactory();
 			bf.registerResolvableDependency(WebDriver.class, driver);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void beforeTestMethod(TestContext testContext) throws Exception {
-//		context.
 		if (driver != null) {
-			SeleniumTest annotation = findAnnotation(testContext.getTestClass(), SeleniumTest.class);
+			setDriver(driver);
+			this.annotation = findAnnotation(testContext.getTestClass(), SeleniumTest.class);
 			driver.get(annotation.baseUrl());
+		} else {
+			prepareTestInstance(testContext);
 		}
 	}
 
 	@Override
 	public void afterTestClass(TestContext testContext) throws Exception {
 		if (driver != null) {
-			driver.quit();
+			killDriver();
 		}
 	}
 
+	@Override
+	public void afterTestMethod(final TestContext testContext) throws Exception {
+		if (testContext.getTestException() == null) {
+			killDriver();
+			return;
+		}
+		killDriver();
+	}
+
+	public void killDriver() {
+		driver.close();
+		driver.quit();
+		driver = null;
+	}
 }
