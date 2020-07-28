@@ -1,10 +1,10 @@
 package br.com.cintra.execute;
 
+import static br.com.cintra.helper.page.PageHelper.setPage;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
-
-import static br.com.cintra.helper.PageHelper.setPage;
 
 import br.com.cintra.interfaces.annotation.Feature;
 import br.com.cintra.interfaces.annotation.Page;

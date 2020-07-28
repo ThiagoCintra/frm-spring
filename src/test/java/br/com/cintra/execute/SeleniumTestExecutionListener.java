@@ -12,7 +12,7 @@ import org.springframework.test.context.support.AbstractTestExecutionListener;
 
 import br.com.cintra.interfaces.annotation.SeleniumTest;
 
-import static br.com.cintra.helper.PageHelper.setDriver;
+import static br.com.cintra.helper.page.PageHelper.setDriver;
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
 
 public class SeleniumTestExecutionListener extends AbstractTestExecutionListener {

@@ -1,21 +1,22 @@
 package br.com.cintra.features;
 
-import static br.com.cintra.helper.PageHelper.getPage;
+import static br.com.cintra.helper.page.PageHelper.getPage;
+
 import br.com.cintra.interfaces.annotation.Feature;
 import br.com.cintra.pages.HomePage;
 
-@Feature(nameFeature = "TesteGoogle")
-public class GoogleFeature {
-
+@Feature(name = "Teste")
+public class  GoggleSteps {
+	
 	HomePage homePage;
 	
 	public void teste01() {
 		homePage = (HomePage) getPage(HomePage.class);
-		homePage.test();
+		homePage.TesteComElementoFluenteEnivar();
 	}
 	
 	public void teste02() {
 		homePage = (HomePage) getPage(HomePage.class);
-		homePage.test2();
+		homePage.TesteComElementoFluentePegarTexto();
 	}
 }

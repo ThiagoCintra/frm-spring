@@ -1,4 +1,4 @@
-package br.com.cintra.helper;
+package br.com.cintra.helper.page;
 
 import java.util.HashMap;
 import java.util.Map;

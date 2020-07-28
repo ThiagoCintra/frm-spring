@@ -1,5 +1,7 @@
 package br.com.cintra.test;
 
+import static br.com.cintra.helper.page.PageHelper.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import br.com.cintra.Application;
-import br.com.cintra.features.GoogleFeature;
+import br.com.cintra.features.GoggleSteps;
 import br.com.cintra.interfaces.annotation.SeleniumTest;
 import br.com.cintra.pages.HomePage;
-import static br.com.cintra.helper.PageHelper.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -21,18 +22,15 @@ import static br.com.cintra.helper.PageHelper.*;
 public class GoogleTest {
 
 	@Autowired
-	GoogleFeature google;
-	
-	
-	
+	GoggleSteps google;
 	
 	@Test
-	public void containsActuatorLinks() throws InterruptedException {
+	public void pesquisaGoogle() throws InterruptedException {
 		google.teste01();
 	}
 
 	@Test
-	public void containsActuatorLinksA() throws InterruptedException {
+	public void pesquisaGoogle2() throws InterruptedException {
 		google.teste02();
 	}
 }

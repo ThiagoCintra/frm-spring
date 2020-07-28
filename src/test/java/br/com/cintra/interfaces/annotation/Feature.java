@@ -10,5 +10,5 @@ import org.springframework.stereotype.Component;
 @Target(ElementType.TYPE)
 @Component
 public @interface Feature {
-	String nameFeature() ;
+	String name() ;
 }
