@@ -9,6 +9,5 @@ import org.springframework.stereotype.Component;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Component
-public @interface Feature {
-	String name() ;
+public @interface Steps {
 }

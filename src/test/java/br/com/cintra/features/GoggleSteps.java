@@ -1,22 +1,22 @@
 package br.com.cintra.features;
 
-import static br.com.cintra.helper.page.PageHelper.getPage;
-
-import br.com.cintra.interfaces.annotation.Feature;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.cintra.interfaces.annotation.Steps;
 import br.com.cintra.pages.HomePage;
 
-@Feature(name = "Teste")
-public class  GoggleSteps {
+@Steps
+public class GoggleSteps {
 	
+	@Autowired
 	HomePage homePage;
 	
-	public void teste01() {
-		homePage = (HomePage) getPage(HomePage.class);
+	public void digitarTextoEmCampoDeBusca() {
 		homePage.TesteComElementoFluenteEnivar();
 	}
 	
-	public void teste02() {
-		homePage = (HomePage) getPage(HomePage.class);
+	public void pegarTextoDoCampoDePesquisa() {
 		homePage.TesteComElementoFluentePegarTexto();
 	}
+	
+	
 }

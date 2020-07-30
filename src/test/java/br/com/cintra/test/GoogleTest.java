@@ -22,15 +22,15 @@ import br.com.cintra.pages.HomePage;
 public class GoogleTest {
 
 	@Autowired
-	GoggleSteps google;
+	GoggleSteps googleSteps;
 	
 	@Test
 	public void pesquisaGoogle() throws InterruptedException {
-		google.teste01();
+		googleSteps.digitarTextoEmCampoDeBusca();
 	}
 
 	@Test
 	public void pesquisaGoogle2() throws InterruptedException {
-		google.teste02();
+		googleSteps.pegarTextoDoCampoDePesquisa();
 	}
 }

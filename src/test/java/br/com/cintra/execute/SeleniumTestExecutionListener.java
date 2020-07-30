@@ -9,7 +9,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
-
 import br.com.cintra.interfaces.annotation.SeleniumTest;
 
 import static br.com.cintra.helper.page.PageHelper.setDriver;
@@ -69,6 +68,7 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
 	public void afterTestMethod(final TestContext testContext) throws Exception {
 		if (testContext.getTestException() == null) {
 			killDriver();
+			
 			return;
 		}
 		killDriver();

@@ -21,7 +21,6 @@ public abstract class PageHelper {
 	public static Object getPage(Class name) {
 		try {
 			Object page = pages.get(name);
-			initilizePage(page);
 			return page;
 		}catch(Exception e) {
 			System.out.println("ainda nao instanciou");
@@ -37,8 +36,4 @@ public abstract class PageHelper {
 		return driver;
 	}
 	
-	private static void initilizePage(Object page) {
-		PageFactory.initElements(driver, page);
-	}
-
 }
