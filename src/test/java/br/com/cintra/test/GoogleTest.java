@@ -1,6 +1,5 @@
 package br.com.cintra.test;
 
-import static br.com.cintra.helper.page.PageHelper.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,11 +25,13 @@ public class GoogleTest {
 	
 	@Test
 	public void pesquisaGoogle() throws InterruptedException {
+		googleSteps.initSteps();
 		googleSteps.digitarTextoEmCampoDeBusca();
 	}
 
 	@Test
 	public void pesquisaGoogle2() throws InterruptedException {
+		googleSteps.initSteps();
 		googleSteps.pegarTextoDoCampoDePesquisa();
 	}
 }
