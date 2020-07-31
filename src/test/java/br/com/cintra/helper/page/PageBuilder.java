@@ -40,4 +40,9 @@ public abstract class PageBuilder {
 		pageFactoryInitilize= false;
 		return this;
 	}
+	
+	public PageBuilder getAtribute(WebElement element, String attribute ) {
+		text = element.getAttribute(attribute);
+		return this;
+	}
 }

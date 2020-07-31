@@ -1,30 +1,53 @@
 package br.com.cintra.helper.page;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.HashMap;
 
-import br.com.cintra.features.GoggleSteps;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
+import br.com.cintra.interfaces.annotation.Step;
 
+@Lazy
+@Component
 public abstract class StepsBuilder {
 
-	Method method[] ;
-	Annotation[] annotation;
+	Method methods[];
+	Annotation[] annotations;
+	HashMap<String, Method> mapMethod = new HashMap<String, Method>();
+	Step stepAnnotation = null;
+	Method method;
 	
-	public StepsBuilder initSteps() {
-		method = this.getClass().getDeclaredMethods();
-		List<Annotation> Arrayannotations = null;
-		for(Method m : method) {
-			annotation = m.getAnnotations();
-			for(Annotation a : annotation) {
-				Arrayannotations.add(a);
+	public StepsBuilder init() {
+		methods = this.getClass().getDeclaredMethods();
+		for (Method m : methods) {
+			annotations = m.getAnnotations();
+			for (Annotation a : annotations) {
+				if (a.toString().contains("Step")) {
+					stepAnnotation = (Step) a;
+					mapMethod.put(stepAnnotation.name(), m);
+				}
+
 			}
 		}
-		
 		return this;
 	}
+
 	
-	
+	public StepsBuilder executeStep(String stepAnnotation) {
+		try {
+			method = mapMethod.get(stepAnnotation);
+			method.setAccessible(true);
+			method.invoke(this);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 }

@@ -22,16 +22,10 @@ public class GoogleTest {
 
 	@Autowired
 	GoggleSteps googleSteps;
-	
-	@Test
-	public void pesquisaGoogle() throws InterruptedException {
-		googleSteps.initSteps();
-		googleSteps.digitarTextoEmCampoDeBusca();
-	}
 
 	@Test
-	public void pesquisaGoogle2() throws InterruptedException {
-		googleSteps.initSteps();
-		googleSteps.pegarTextoDoCampoDePesquisa();
+	public void pesquisaGoogle() throws InterruptedException {
+		googleSteps.init().executeStep("acesso a page do gogole e digito")
+		  .executeStep("campo de deve conter texto");
 	}
 }
