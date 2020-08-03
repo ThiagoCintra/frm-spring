@@ -1,4 +1,4 @@
-package br.com.cintra.helper.page;
+package br.com.cintra.helper.step;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import br.com.cintra.interfaces.annotation.Step;
+import br.com.cintra.interfaces.annotation.step.Step;
 
 @Lazy
 @Component
@@ -20,13 +20,16 @@ public abstract class StepsBuilder {
 	Step stepAnnotation = null;
 	Method method;
 	
-	public StepsBuilder init() {
+	public StepsBuilder init() throws Exception {
 		methods = this.getClass().getDeclaredMethods();
 		for (Method m : methods) {
 			annotations = m.getAnnotations();
 			for (Annotation a : annotations) {
 				if (a.toString().contains("Step")) {
 					stepAnnotation = (Step) a;
+					if(mapMethod.get(stepAnnotation.name()) != null) {
+						throw new Exception();
+					}
 					mapMethod.put(stepAnnotation.name(), m);
 				}
 

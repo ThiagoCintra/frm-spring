@@ -5,7 +5,8 @@ import static br.com.cintra.helper.page.PageHelper.setPage;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
-import br.com.cintra.interfaces.annotation.Page;
+
+import br.com.cintra.interfaces.annotation.page.Page;
 
 @Component
 public class BeanProcessor implements BeanPostProcessor {

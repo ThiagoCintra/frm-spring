@@ -7,23 +7,21 @@ import org.openqa.selenium.support.FindBy;
 import org.springframework.context.annotation.Scope;
 
 import br.com.cintra.helper.page.PageBuilder;
+import br.com.cintra.interfaces.annotation.element.SearchWith;
 import br.com.cintra.interfaces.annotation.page.Page;
 
 @Page
 @Scope("prototype")
-public class HomePage extends PageBuilder{
+public class GooglePage extends PageBuilder{
 
-	@FindBy(name ="q")
+	 public static final String PAGE = "GooglePage";
+	 
+	@SearchWith (inPage = GooglePage.PAGE, locatorsFile = "src\\test\\java\\jsonPage\\TestJsonPage.json", name = "cmpPesquisa")
 	private WebElement txtSearch;
 	
-	@FindBy(name ="q")
-	private WebElement txtA;
 	
 	public void enviar_texto() {
-		super.buildPage().sendKeys(txtSearch, "Teste com elemento fluente");
+		super.buildPage2().sendKeys(txtSearch, "Teste com elemento fluente");
 	}
 	
-	public String get_texto() {
-		return super.getAtribute(txtSearch,"value").toString();
-	}
 }

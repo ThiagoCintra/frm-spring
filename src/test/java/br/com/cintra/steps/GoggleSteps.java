@@ -1,12 +1,13 @@
-package br.com.cintra.features;
+package br.com.cintra.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.cintra.helper.page.StepsBuilder;
-import br.com.cintra.interfaces.annotation.Step;
-import br.com.cintra.interfaces.annotation.Steps;
+import br.com.cintra.helper.step.StepsBuilder;
+import br.com.cintra.interfaces.annotation.step.Step;
+import br.com.cintra.interfaces.annotation.step.Steps;
+import br.com.cintra.pages.GooglePage;
 import br.com.cintra.pages.HomePage;
 
 @Steps
@@ -14,10 +15,14 @@ public class GoggleSteps extends StepsBuilder {
 
 	@Autowired
 	HomePage homePage;
-
+	
+	@Autowired
+	GooglePage googlePage;
+	
 	@Step(name = "acesso a page do gogole e digito")
 	private void digitarTextoEmCampoDeBusca() {
 		homePage.enviar_texto();
+		
 	}
 
 	@Step(name = "campo de deve conter texto")
@@ -25,4 +30,11 @@ public class GoggleSteps extends StepsBuilder {
 		assertEquals("Teste com elemento fluente", homePage.get_texto());
 	}
 
+	@Step(name = "google page enviar texto")
+	private void digitarTextoEmCampoDeBuscaGoogle() {
+		googlePage.enviar_texto();
+		
+	}
+	
+	
 }

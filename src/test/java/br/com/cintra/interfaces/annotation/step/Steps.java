@@ -1,4 +1,4 @@
-package br.com.cintra.interfaces.annotation;
+package br.com.cintra.interfaces.annotation.step;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,6 +9,5 @@ import org.springframework.stereotype.Component;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Component
-public @interface Page {
-
+public @interface Steps {
 }

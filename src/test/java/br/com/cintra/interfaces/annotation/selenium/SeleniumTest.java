@@ -1,4 +1,4 @@
-package br.com.cintra.interfaces.annotation;
+package br.com.cintra.interfaces.annotation.selenium;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
