@@ -15,7 +15,8 @@ public class FileBasedElementLocatorFactory implements ElementLocatorFactory {
     public FileBasedElementLocatorFactory(SearchContext searchContext) {
         this.searchContext = searchContext;
     }
+    
 	public ElementLocator createLocator(Field field) {
-		 return (ElementLocator) new FileBasedElementLocator(searchContext, new CustomAnnotations(field));
+		 return new FileBasedElementLocator(searchContext, new CustomAnnotations(field));
 	}
 }

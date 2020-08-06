@@ -10,7 +10,6 @@ import com.google.gson.JsonParser;
 import br.com.cintra.interfaces.annotation.element.SearchWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.CacheLookup;
-import org.openqa.selenium.support.pagefactory.AbstractAnnotations;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +17,10 @@ import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 
+import static br.com.cintra.helper.element.helper.ElementConstants.getMapBy;
+
 public class CustomAnnotations extends AbstractAnnotations {
+
 	private final Field field;
 
 	public CustomAnnotations(Field field) {
@@ -27,6 +29,7 @@ public class CustomAnnotations extends AbstractAnnotations {
 
 	@Override
 	public By buildBy() {
+
 		SearchWith search = field.getAnnotation(SearchWith.class);
 		Preconditions.checkArgument(search != null, "Failed to locate the annotation @SearchWith");
 		String elementName = search.name();
@@ -35,8 +38,10 @@ public class CustomAnnotations extends AbstractAnnotations {
 		Preconditions.checkArgument(isNotNullAndEmpty(elementName), "Element name is not found.");
 		Preconditions.checkArgument(isNotNullAndEmpty(pageName), "Page name is missing.");
 		Preconditions.checkArgument(isNotNullAndEmpty(locatorsFile), "Locators File name not provided");
+		// refatorar
 		File file = new File(locatorsFile);
 		Preconditions.checkArgument(file.exists(), "Unable to locate " + locatorsFile);
+
 		try {
 
 			JsonArray array = new JsonParser().parse(new FileReader(file)).getAsJsonArray();
@@ -51,17 +56,45 @@ public class CustomAnnotations extends AbstractAnnotations {
 					break;
 				}
 			}
+
 			Preconditions.checkState(foundObject != null,
 					"No entry found for the page [" + pageName + "] in the " + "locators file [" + locatorsFile + "]");
 			String locateUsing = foundObject.get("locateUsing").getAsString();
-			if (!("xpath".equalsIgnoreCase(locateUsing))) {
+
+			String type = getMapBy(locateUsing);
+
+			if (type == null) {
+
 				throw new UnsupportedOperationException(
 						"Currently " + locateUsing + " is NOT supported. Only xPaths " + "are supported");
+
 			}
 
 			String locator = foundObject.get("locator").getAsString();
 			Preconditions.checkArgument(isNotNullAndEmpty(locator), "Locator cannot be null (or) empty.");
-			return new By.ByXPath(locator);
+
+			if (type.equalsIgnoreCase("name")) {
+
+				return new By.ByName(locator);
+
+			} else if (type.equalsIgnoreCase("id")) {
+
+				return new By.ById(locator);
+
+			} else if (type.equalsIgnoreCase("className")) {
+
+				return new By.ByClassName(locator);
+
+			}
+
+			else if (type.equalsIgnoreCase("css")) {
+				return new By.ByCssSelector(locator);
+			}
+
+			else {
+				return new By.ByXPath(locator);
+			}
+
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
@@ -76,4 +109,5 @@ public class CustomAnnotations extends AbstractAnnotations {
 	private boolean isNotNullAndEmpty(String arg) {
 		return ((arg != null) && (!arg.trim().isEmpty()));
 	}
+
 }
