@@ -1,4 +1,4 @@
-package br.com.cintra.steps;
+package br.com.cintra.test_steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.com.cintra.helper.step.StepsBuilder;
 import br.com.cintra.interfaces.annotation.step.Step;
 import br.com.cintra.interfaces.annotation.step.Steps;
-import br.com.cintra.pages.GooglePage;
-import br.com.cintra.pages.HomePage;
+import br.com.cintra.test_pages.GooglePage;
+import br.com.cintra.test_pages.HomePage;
 
 @Steps
 public class GoggleSteps extends StepsBuilder {

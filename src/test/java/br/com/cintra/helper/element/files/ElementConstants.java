@@ -1,4 +1,4 @@
-package br.com.cintra.helper.element.helper;
+package br.com.cintra.helper.element.files;
 
 import java.util.HashMap;
 import org.springframework.stereotype.Component;

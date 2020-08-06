@@ -11,13 +11,15 @@ import br.com.cintra.interfaces.annotation.element.SearchWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.CacheLookup;
 
+import static br.com.cintra.helper.element.files.ElementConstants.getMapBy;
+import static br.com.cintra.helper.element.files.JsonFiles.getFileInstantiete;
+import static br.com.cintra.helper.element.files.JsonFiles.getFileJsonParse;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.util.Iterator;
-
-import static br.com.cintra.helper.element.helper.ElementConstants.getMapBy;
 
 public class CustomAnnotations extends AbstractAnnotations {
 
@@ -29,36 +31,30 @@ public class CustomAnnotations extends AbstractAnnotations {
 
 	@Override
 	public By buildBy() {
-
 		SearchWith search = field.getAnnotation(SearchWith.class);
 		Preconditions.checkArgument(search != null, "Failed to locate the annotation @SearchWith");
 		String elementName = search.name();
-		String pageName = search.inPage();
 		String locatorsFile = search.locatorsFile();
 		Preconditions.checkArgument(isNotNullAndEmpty(elementName), "Element name is not found.");
-		Preconditions.checkArgument(isNotNullAndEmpty(pageName), "Page name is missing.");
 		Preconditions.checkArgument(isNotNullAndEmpty(locatorsFile), "Locators File name not provided");
-		// refatorar
-		File file = new File(locatorsFile);
-		Preconditions.checkArgument(file.exists(), "Unable to locate " + locatorsFile);
+		Preconditions.checkArgument(getFileInstantiete().get(locatorsFile).exists(), "Unable to locate " + locatorsFile);
 
 		try {
 
-			JsonArray array = new JsonParser().parse(new FileReader(file)).getAsJsonArray();
+			JsonArray array = getFileJsonParse().get(locatorsFile).getAsJsonArray();
 			Iterator<JsonElement> iterator = array.iterator();
 			JsonObject foundObject = null;
 
 			while (iterator.hasNext()) {
 				JsonObject object = iterator.next().getAsJsonObject();
-				if (pageName.equalsIgnoreCase(object.get("pageName").getAsString())
-						&& elementName.equalsIgnoreCase(object.get("name").getAsString())) {
+				if (elementName.equalsIgnoreCase(object.get("name").getAsString())) {
 					foundObject = object;
 					break;
 				}
 			}
 
 			Preconditions.checkState(foundObject != null,
-					"No entry found for the page [" + pageName + "] in the " + "locators file [" + locatorsFile + "]");
+					"No entry found for the page [" + locatorsFile + "] in the " + "locators file [" + locatorsFile + "]");
 			String locateUsing = foundObject.get("locateUsing").getAsString();
 
 			String type = getMapBy(locateUsing);
@@ -95,7 +91,7 @@ public class CustomAnnotations extends AbstractAnnotations {
 				return new By.ByXPath(locator);
 			}
 
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 

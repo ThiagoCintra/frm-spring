@@ -1,6 +1,5 @@
 [
   {
-    "pageName": "GooglePage",
     "name": "cmpPesquisa",
     "locateUsing": "xpath",
     "locator": "//input[@name='q']"
