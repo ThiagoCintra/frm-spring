@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import br.com.cintra.helper.page.PageBuilder;
 import br.com.cintra.interfaces.annotation.page.Page;
 
-@Page
+@Page(name = "Teste")
 @Scope("prototype")
 public class HomePage extends PageBuilder{
 

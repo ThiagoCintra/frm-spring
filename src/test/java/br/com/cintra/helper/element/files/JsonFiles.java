@@ -57,5 +57,4 @@ public class JsonFiles {
 		JsonFiles.fileJsonParse = fileJsonParse;
 	}
 
-
 }

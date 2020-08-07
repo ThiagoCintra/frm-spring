@@ -11,7 +11,7 @@ import br.com.cintra.test_pages.GooglePage;
 import br.com.cintra.test_pages.HomePage;
 
 @Steps
-public class GoggleSteps extends StepsBuilder {
+public class GoogleSteps extends StepsBuilder {
 
 	@Autowired
 	HomePage homePage;

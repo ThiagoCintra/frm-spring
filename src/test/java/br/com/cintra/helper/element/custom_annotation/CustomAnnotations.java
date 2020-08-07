@@ -24,14 +24,20 @@ import java.util.Iterator;
 public class CustomAnnotations extends AbstractAnnotations {
 
 	private final Field field;
-
-	public CustomAnnotations(Field field) {
+	private final String name;
+	
+	public CustomAnnotations(Field field,String name) {
 		this.field = field;
+		this.name = name;
 	}
 
 	@Override
 	public By buildBy() {
 		SearchWith search = field.getAnnotation(SearchWith.class);
+		if(search==null) {
+			field.getClass();
+			System.out.println("");
+		}
 		Preconditions.checkArgument(search != null, "Failed to locate the annotation @SearchWith");
 		String elementName = search.name();
 		String locatorsFile = search.locatorsFile();

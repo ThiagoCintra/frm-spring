@@ -9,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import br.com.cintra.Application;
 import br.com.cintra.interfaces.annotation.selenium.SeleniumTest;
-import br.com.cintra.test_pages.HomePage;
-import br.com.cintra.test_steps.GoggleSteps;
+import br.com.cintra.test_steps.GoogleSteps;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -21,7 +20,7 @@ import br.com.cintra.test_steps.GoggleSteps;
 public class GoogleTest {
 
 	@Autowired
-	GoggleSteps googleSteps;
+	GoogleSteps googleSteps;
 
 	@Test
 	public void pesquisaGoogle() throws Exception {

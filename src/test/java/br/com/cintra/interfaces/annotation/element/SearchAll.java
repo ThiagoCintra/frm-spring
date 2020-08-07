@@ -1,14 +1,12 @@
-package br.com.cintra.interfaces.annotation.page;
+package br.com.cintra.interfaces.annotation.element;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.springframework.stereotype.Component;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Component
-public @interface Page {
-	public String name() ;
+@Target(ElementType.FIELD)
+public @interface SearchAll {
+	public SearchWith [] list();
 }
