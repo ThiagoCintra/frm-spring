@@ -1,12 +1,16 @@
 package br.com.cintra.helper.element.custom_annotation;
 
 import org.openqa.selenium.support.pagefactory.AbstractAnnotations;
+import org.openqa.selenium.support.pagefactory.ByAll;
+
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import br.com.cintra.helper.element.bys.ByType;
+import br.com.cintra.interfaces.annotation.element.SearchAll;
 import br.com.cintra.interfaces.annotation.element.SearchWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.CacheLookup;
@@ -14,6 +18,7 @@ import org.openqa.selenium.support.CacheLookup;
 import static br.com.cintra.helper.element.files.ElementConstants.getMapBy;
 import static br.com.cintra.helper.element.files.JsonFiles.getFileInstantiete;
 import static br.com.cintra.helper.element.files.JsonFiles.getFileJsonParse;
+import static br.com.cintra.helper.element.files.JsonFiles.getJsonArray;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,77 +29,27 @@ import java.util.Iterator;
 public class CustomAnnotations extends AbstractAnnotations {
 
 	private final Field field;
+	private final String pageName;
 
-	public CustomAnnotations(Field field) {
+	public CustomAnnotations(Field field, String pageName) {
 		this.field = field;
+		this.pageName = pageName;
 	}
 
 	@Override
 	public By buildBy() {
+
 		SearchWith search = field.getAnnotation(SearchWith.class);
-		Preconditions.checkArgument(search != null, "Failed to locate the annotation @SearchWith");
-		String elementName = search.name();
-		String locatorsFile = search.locatorsFile();
-		Preconditions.checkArgument(isNotNullAndEmpty(elementName), "Element name is not found.");
-		Preconditions.checkArgument(isNotNullAndEmpty(locatorsFile), "Locators File name not provided");
-		Preconditions.checkArgument(getFileInstantiete().get(locatorsFile).exists(), "Unable to locate " + locatorsFile);
+		SearchAll all = field.getAnnotation(SearchAll.class);
 
-		try {
+		if (search != null) {
+			ByType type = new ByType(search, pageName);
+			return type.by();
 
-			JsonArray array = getFileJsonParse().get(locatorsFile).getAsJsonArray();
-			Iterator<JsonElement> iterator = array.iterator();
-			JsonObject foundObject = null;
-
-			while (iterator.hasNext()) {
-				JsonObject object = iterator.next().getAsJsonObject();
-				if (elementName.equalsIgnoreCase(object.get("name").getAsString())) {
-					foundObject = object;
-					break;
-				}
-			}
-
-			Preconditions.checkState(foundObject != null,
-					"No entry found for the page [" + locatorsFile + "] in the " + "locators file [" + locatorsFile + "]");
-			String locateUsing = foundObject.get("locateUsing").getAsString();
-
-			String type = getMapBy(locateUsing);
-
-			if (type == null) {
-
-				throw new UnsupportedOperationException(
-						"Currently " + locateUsing + " is NOT supported. Only xPaths " + "are supported");
-
-			}
-
-			String locator = foundObject.get("locator").getAsString();
-			Preconditions.checkArgument(isNotNullAndEmpty(locator), "Locator cannot be null (or) empty.");
-
-			if (type.equalsIgnoreCase("name")) {
-
-				return new By.ByName(locator);
-
-			} else if (type.equalsIgnoreCase("id")) {
-
-				return new By.ById(locator);
-
-			} else if (type.equalsIgnoreCase("className")) {
-
-				return new By.ByClassName(locator);
-
-			}
-
-			else if (type.equalsIgnoreCase("css")) {
-				return new By.ByCssSelector(locator);
-			}
-
-			else {
-				return new By.ByXPath(locator);
-			}
-
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		} else {
+			ByType type = new ByType(pageName);
+			return new ByAll(type.allBys());
 		}
-
 	}
 
 	@Override

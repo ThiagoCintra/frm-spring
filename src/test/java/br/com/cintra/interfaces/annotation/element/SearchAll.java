@@ -7,9 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface SearchWith {
-    
-	String locatorsFile() default "";
-    String name() default "";
+public @interface SearchAll {
     
 }

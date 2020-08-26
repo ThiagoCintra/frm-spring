@@ -7,16 +7,18 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 
 import br.com.cintra.helper.element.custom_annotation.CustomAnnotations;
+import br.com.cintra.interfaces.annotation.page.Page;
 
 public class FileBasedElementLocatorFactory implements ElementLocatorFactory {
-    
+
 	private final SearchContext searchContext;
- 
-    public FileBasedElementLocatorFactory(SearchContext searchContext) {
-        this.searchContext = searchContext;
-    }
-    
+
+	public FileBasedElementLocatorFactory(SearchContext searchContext) {
+		this.searchContext = searchContext;
+	}
+
 	public ElementLocator createLocator(Field field) {
-		 return new FileBasedElementLocator(searchContext, new CustomAnnotations(field));
+		Page page = field.getDeclaringClass().getAnnotation(Page.class);
+		return new FileBasedElementLocator(searchContext, new CustomAnnotations(field,page.name()));
 	}
 }

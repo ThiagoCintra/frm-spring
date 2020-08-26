@@ -15,14 +15,14 @@ public class GoggleSteps extends StepsBuilder {
 
 	@Autowired
 	HomePage homePage;
-	
+
 	@Autowired
 	GooglePage googlePage;
-	
+
 	@Step(name = "acesso a page do gogole e digito")
 	private void digitarTextoEmCampoDeBusca() {
 		homePage.enviar_texto();
-		
+
 	}
 
 	@Step(name = "campo de deve conter texto")
@@ -31,10 +31,8 @@ public class GoggleSteps extends StepsBuilder {
 	}
 
 	@Step(name = "google page enviar texto")
-	private void digitarTextoEmCampoDeBuscaGoogle() {
+	private void digitarTextoEmCampoDeBuscaGoogle() throws Exception {
 		googlePage.enviar_texto();
-		
 	}
-	
-	
+
 }

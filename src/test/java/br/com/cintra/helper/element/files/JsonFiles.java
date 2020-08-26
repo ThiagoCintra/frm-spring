@@ -5,13 +5,16 @@ import static br.com.cintra.helper.element.files.JsonFiles.getFileInstantiete;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
@@ -37,7 +40,6 @@ public class JsonFiles {
 			} catch (JsonIOException e) {
 				e.printStackTrace();
 			} catch (JsonSyntaxException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -57,5 +59,12 @@ public class JsonFiles {
 		JsonFiles.fileJsonParse = fileJsonParse;
 	}
 
+	public static JsonArray getJsonArray(String key) {
+		return fileJsonParse.get(key).getAsJsonArray();
+	}
+	
+	public static Iterator<JsonElement> getJsonIterator(String key) {
+		return fileJsonParse.get(key).getAsJsonArray().iterator();
+	}
 
 }

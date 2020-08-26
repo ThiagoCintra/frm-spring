@@ -39,17 +39,22 @@ public abstract class StepsBuilder {
 	}
 
 	
-	public StepsBuilder executeStep(String stepAnnotation) {
+	public StepsBuilder executeStep(String stepAnnotation) throws IllegalAccessException, InvocationTargetException {
 		try {
 			method = mapMethod.get(stepAnnotation);
 			method.setAccessible(true);
 			method.invoke(this);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
+			throw new IllegalAccessException();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
+			throw new InvocationTargetException(e.getTargetException());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			throw new NullPointerException();
 		}
 		return this;
 	}

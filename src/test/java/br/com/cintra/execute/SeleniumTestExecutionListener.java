@@ -11,7 +11,9 @@ import org.springframework.core.Ordered;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 
+
 import br.com.cintra.helper.element.element_locator_factory.FileBasedElementLocatorFactory;
+import br.com.cintra.helper.element.search.SearchWithFieldDecorator;
 import br.com.cintra.interfaces.annotation.selenium.SeleniumTest;
 
 import static br.com.cintra.helper.page.PageHelper.setDriver;
@@ -24,7 +26,7 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
 	private SeleniumTest annotation;
 	private ConfigurableApplicationContext configurableApplicationContext;
 	private ConfigurableListableBeanFactory bf;
-	private ElementLocatorFactory factory;
+	private SearchWithFieldDecorator factory;
 	
 	public int getOrder() {
 		return Ordered.HIGHEST_PRECEDENCE;
@@ -44,7 +46,6 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
 				bf = configurableApplicationContext.getBeanFactory();
 			}
 			driver = BeanUtils.instantiateClass(annotation.driver());
-			factory = new FileBasedElementLocatorFactory(driver);
 			bf.registerResolvableDependency(WebDriver.class, driver);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,6 +55,7 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
 	@Override
 	public void beforeTestMethod(TestContext testContext) throws Exception {
 		if (driver != null) {
+			factory = new SearchWithFieldDecorator(new FileBasedElementLocatorFactory(driver));
 			setDriver(driver);
 			this.annotation = findAnnotation(testContext.getTestClass(), SeleniumTest.class);
 			setFactory(factory);

@@ -10,5 +10,5 @@ import org.springframework.stereotype.Component;
 @Target(ElementType.TYPE)
 @Component
 public @interface Page {
-
+	String name() default "";
 }

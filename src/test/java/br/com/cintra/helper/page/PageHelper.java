@@ -11,11 +11,13 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 import org.springframework.beans.factory.config.SetFactoryBean;
 
+import br.com.cintra.helper.element.search.SearchWithFieldDecorator;
+
 public abstract class PageHelper {
 
 	private static HashMap<Class, Object> pages = new HashMap<Class,Object>();
 	private static RemoteWebDriver driver;
-	private static ElementLocatorFactory factory;
+	private static SearchWithFieldDecorator factory;
 	
 	public static void setPage(Class clazz, Object bean) {
 		pages.put(clazz, bean);
@@ -39,11 +41,11 @@ public abstract class PageHelper {
 		return driver;
 	}
 	
-	public static void setFactory(ElementLocatorFactory f) {
+	public static void setFactory(SearchWithFieldDecorator f) {
 		factory = f;
 	}
 	
-	public static ElementLocatorFactory getFactory() {
+	public static SearchWithFieldDecorator getFactory() {
 		return factory;
 	}
 }

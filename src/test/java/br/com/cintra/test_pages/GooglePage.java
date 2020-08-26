@@ -1,25 +1,26 @@
 package br.com.cintra.test_pages;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.context.annotation.Scope;
 
 import br.com.cintra.helper.page.PageBuilder;
-import br.com.cintra.interfaces.annotation.element.SearchWith;
+import br.com.cintra.interfaces.annotation.element.SearchAll;
 import br.com.cintra.interfaces.annotation.page.Page;
 
-@Page
+
+@Page(name = "googlePage")
 @Scope("prototype")
 public class GooglePage extends PageBuilder{
-
-	@SearchWith (locatorsFile = "googlePage", name = "cmpPesquisa")
-	private WebElement txtSearch;
 	
+	@SearchAll
+	List<WebElement> jsonElements;
 	
-	public void enviar_texto() {
-		super.buildPage2().sendKeys(txtSearch, "Teste com elemento fluente").sendKeys(txtSearch, "reteste");
+	public void enviar_texto() throws Exception {
+		super.buildPage2().sendKeys("cmpPesquisa", "abc").click("btnPesquisar").getAtribute("cmpPesquisa", "value");
 	}
 	
 }
