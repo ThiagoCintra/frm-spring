@@ -5,8 +5,8 @@
     "locator": "//input[@name='q']"
   },
   {
-    "name": "btnPesquisar",
-    "locateUsing": "name",
-    "locator": "btnK"
+    "name": "teste",
+    "locateUsing": "xpath",
+    "locator": "//input[@name='q']"
   }
 ]

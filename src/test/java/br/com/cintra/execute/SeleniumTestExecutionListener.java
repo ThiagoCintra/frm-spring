@@ -2,7 +2,6 @@ package br.com.cintra.execute;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -19,8 +18,10 @@ import br.com.cintra.interfaces.annotation.selenium.SeleniumTest;
 import static br.com.cintra.helper.page.PageHelper.setDriver;
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
 import static br.com.cintra.helper.page.PageHelper.setFactory;
+
 public class SeleniumTestExecutionListener extends AbstractTestExecutionListener {
 
+	
 	private static RemoteWebDriver driver;
 	private ApplicationContext context = null;
 	private SeleniumTest annotation;
@@ -30,8 +31,10 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
 	
 	public int getOrder() {
 		return Ordered.HIGHEST_PRECEDENCE;
+		
 	}
 
+	
 	@Override
 	public void prepareTestInstance(TestContext testContext) throws Exception {
 		if (driver != null) {
@@ -52,6 +55,7 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
 		}
 	}
 
+	
 	@Override
 	public void beforeTestMethod(TestContext testContext) throws Exception {
 		if (driver != null) {

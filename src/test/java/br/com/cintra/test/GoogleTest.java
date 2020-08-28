@@ -24,14 +24,13 @@ public class GoogleTest {
 	GoggleSteps googleSteps;
 
 	@Test
-	public void pesquisaGoogle() throws Exception {
-		googleSteps.init().executeStep("acesso a page do gogole e digito")
+	public void pesquisaGooglePageFactory() throws Exception {
+		googleSteps.init().executeStep("acesso a page do google e digito")
 		  .executeStep("campo de deve conter texto");
 	}
 	
-	
 	@Test
-	public void pesquisaGoogle1() throws Exception {
+	public void pesquisaGoogleModifyPageFactory() throws Exception {
 		googleSteps.init().executeStep("google page enviar texto");
 	}
 }

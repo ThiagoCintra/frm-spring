@@ -8,6 +8,7 @@ import java.util.HashMap;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import br.com.cintra.interfaces.annotation.aop.log.clazz.StepAop;
 import br.com.cintra.interfaces.annotation.step.Step;
 
 @Lazy
@@ -20,6 +21,8 @@ public abstract class StepsBuilder {
 	Step stepAnnotation = null;
 	Method method;
 	
+	
+	@StepAop
 	public StepsBuilder init() throws Exception {
 		methods = this.getClass().getDeclaredMethods();
 		for (Method m : methods) {
@@ -38,7 +41,7 @@ public abstract class StepsBuilder {
 		return this;
 	}
 
-	
+	@StepAop
 	public StepsBuilder executeStep(String stepAnnotation) throws IllegalAccessException, InvocationTargetException {
 		try {
 			method = mapMethod.get(stepAnnotation);
@@ -57,5 +60,10 @@ public abstract class StepsBuilder {
 			throw new NullPointerException();
 		}
 		return this;
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getName();
 	}
 }

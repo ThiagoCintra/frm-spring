@@ -12,23 +12,22 @@ import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import br.com.cintra.interfaces.annotation.aop.log.clazz.BuilderPage;
 import br.com.cintra.interfaces.annotation.page.Page;
+
 
 public abstract class PageBuilder {
 
 	private String text;
 	private HashMap<String, WebElement> mapOfElements = new HashMap<String, WebElement>();
 	private List<WebElement> listElements;
-	private final String pageName;
+	private String pageName;
 	private Field field;
 
-	protected PageBuilder() {
-		Page page = this.getClass().getAnnotation(Page.class);
-		this.pageName = page.name();
-	}
 
 	@Override
 	public String toString() {
@@ -56,6 +55,7 @@ public abstract class PageBuilder {
 		return this;
 	}
 
+	
 	public PageBuilder sendKeys(String name, String txt) {
 		try {
 			mapOfElements.get(name).sendKeys(txt);
@@ -99,20 +99,22 @@ public abstract class PageBuilder {
 		return this;
 	}
 	
-	
+	@BuilderPage
 	public PageBuilder buildPage() {
 		PageFactory.initElements(getDriver(), this);
 		return this;
 	}
 
+	@BuilderPage
 	public PageBuilder buildPage2() throws Exception {
+		Page page = this.getClass().getAnnotation(Page.class);
+		this.pageName = page.name();
 		PageFactory.initElements(getFactory(), this);
 		initElements();
 		return this;
-
 	}
 
-	@SuppressWarnings({ "unchecked", "unused" })
+	
 	private void initElements() throws Exception {
 		try {
 			field = this.getClass().getDeclaredField("jsonElements");
@@ -144,5 +146,9 @@ public abstract class PageBuilder {
 
 			}
 		}
+	}
+	
+	public String getClassName() {
+		return this.getClass().getName();
 	}
 }

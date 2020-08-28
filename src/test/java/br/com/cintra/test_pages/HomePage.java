@@ -11,19 +11,19 @@ import br.com.cintra.interfaces.annotation.page.Page;
 
 @Page
 @Scope("prototype")
-public class HomePage extends PageBuilder{
+public class HomePage extends PageBuilder {
 
-	@FindBy(name ="q")
+	@FindBy(name = "q")
 	private WebElement txtSearch;
-	
-	@FindBy(name ="q")
+
+	@FindBy(name = "q")
 	private WebElement txtA;
-	
+
 	public void enviar_texto() {
 		super.buildPage().sendKeys(txtSearch, "Teste com elemento fluente");
 	}
-	
+
 	public String get_texto() {
-		return super.getAtribute(txtSearch,"value").toString();
+		return super.getAtribute(txtSearch, "value").toString();
 	}
 }
