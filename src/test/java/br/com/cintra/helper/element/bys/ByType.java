@@ -4,23 +4,35 @@ import static br.com.cintra.helper.element.files.ElementConstants.getMapBy;
 import static br.com.cintra.helper.element.files.JsonFiles.getFileInstantiete;
 import static br.com.cintra.helper.element.files.JsonFiles.getJsonArray;
 import static br.com.cintra.helper.element.files.JsonFiles.getJsonIterator;
-import java.util.Iterator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import org.junit.Ignore;
 import org.openqa.selenium.By;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import br.com.cintra.interfaces.annotation.element.SearchAll;
 import br.com.cintra.interfaces.annotation.element.SearchWith;
 
 public class ByType {
 
 	SearchWith search;
+	SearchAll searchall;
 	String pageName;
 
 	public ByType(SearchWith search, String pageName) {
 		this.search = search;
+		this.pageName = pageName;
+	}
+
+	public ByType(SearchAll searchall, String pageName) {
+		this.searchall = searchall;
 		this.pageName = pageName;
 	}
 
@@ -79,14 +91,19 @@ public class ByType {
 	}
 
 	public By[] allBys() {
+
 		int size = getJsonArray(pageName).size();
 		int i = 0;
 		By[] bys = new By[size];
+		JsonObject object;
+
 		try {
+
 			Iterator<JsonElement> iterator = getJsonIterator(pageName);
 
 			while (iterator.hasNext()) {
-				JsonObject object = iterator.next().getAsJsonObject();
+
+				object = iterator.next().getAsJsonObject();
 
 				String type = getMapBy(object.get("locateUsing").getAsString());
 
@@ -132,4 +149,35 @@ public class ByType {
 		}
 	}
 
+//	public By[] allBys2() {
+//
+//		int size = getJsonArray(pageName).size();
+//		int i = 0;
+//		List<String> ignore = Arrays.asList(searchall.ignore());
+//		By[] bys = new By[size];
+//		JsonObject object;
+//
+//		try {
+//
+//			Iterator<JsonElement> iterator = getJsonIterator(pageName);
+//
+//			while (iterator.hasNext()) {
+//
+//				object = iterator.next().getAsJsonObject();
+//
+//				String type = getMapBy(object.get("locateUsing").getAsString());
+//
+//				if (type == null) {
+//					throw new UnsupportedOperationException("Currently is NOT supported " + type);
+//				}
+//
+//				String locator = object.get("locator").getAsString();
+//				bys[i] = type(type, locator);
+//				i++;
+//			}
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//		return bys;
+//	}
 }

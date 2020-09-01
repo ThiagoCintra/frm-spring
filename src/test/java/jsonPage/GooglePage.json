@@ -7,6 +7,6 @@
   {
     "name": "teste",
     "locateUsing": "xpath",
-    "locator": "//input[@name='q']"
+    "locator": "//a"
   }
 ]

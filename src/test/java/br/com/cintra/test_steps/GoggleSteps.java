@@ -31,7 +31,7 @@ public class GoggleSteps extends StepsBuilder {
 
 	@Step(name = "google page enviar texto")
 	private void digitarTextoEmCampoDeBuscaGoogle() throws Exception {
-		googlePage.buildPage2().sendKeys("cmpPesquisa", "outro teste");
+		googlePage.buildPageFactory().sendKeys("cmpPesquisa", "vai").sendKeys(googlePage.getElementInList("lista", "value", "vai"),"teste");
+		
 	}
-
 }

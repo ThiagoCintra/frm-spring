@@ -1,4 +1,4 @@
-package br.com.cintra.helper.page;
+package br.com.cintra.helper.test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,11 +13,12 @@ import org.springframework.beans.factory.config.SetFactoryBean;
 
 import br.com.cintra.helper.element.search.SearchWithFieldDecorator;
 
-public abstract class PageHelper {
+public abstract class TestHelper {
 
 	private static HashMap<Class, Object> pages = new HashMap<Class,Object>();
 	private static RemoteWebDriver driver;
 	private static SearchWithFieldDecorator factory;
+	private static String currentTest;
 	
 	public static void setPage(Class clazz, Object bean) {
 		pages.put(clazz, bean);
@@ -47,5 +48,13 @@ public abstract class PageHelper {
 	
 	public static SearchWithFieldDecorator getFactory() {
 		return factory;
+	}
+	
+	public static void setCurrentTest(String name) {
+		currentTest = name;
+	}
+	
+	public static String getCurrentTest() {
+		return currentTest;
 	}
 }

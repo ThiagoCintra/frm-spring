@@ -24,7 +24,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 public class CustomAnnotations extends AbstractAnnotations {
 
@@ -40,25 +42,23 @@ public class CustomAnnotations extends AbstractAnnotations {
 	public By buildBy() {
 
 		SearchWith search = field.getAnnotation(SearchWith.class);
-		SearchAll all = field.getAnnotation(SearchAll.class);
+		SearchAll searchAll = field.getAnnotation(SearchAll.class);
 
 		if (search != null) {
 			ByType type = new ByType(search, pageName);
 			return type.by();
 
-		} else {
-			ByType type = new ByType(pageName);
+		} else if (searchAll != null) {
+			ByType type = new ByType(searchAll, pageName);
 			return new ByAll(type.allBys());
+		} else {
+			return null;
 		}
 	}
 
 	@Override
 	public boolean isLookupCached() {
 		return (field.getAnnotation(CacheLookup.class) != null);
-	}
-
-	private boolean isNotNullAndEmpty(String arg) {
-		return ((arg != null) && (!arg.trim().isEmpty()));
 	}
 
 }

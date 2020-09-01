@@ -1,6 +1,6 @@
 package br.com.cintra.execute;
 
-import static br.com.cintra.helper.page.PageHelper.setPage;
+import static br.com.cintra.helper.test.TestHelper.setPage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

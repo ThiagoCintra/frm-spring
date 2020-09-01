@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 public @interface SearchWith {
     
 	String locatorsFile() default "";
-    String name() default "";
+    String name();
     
 }

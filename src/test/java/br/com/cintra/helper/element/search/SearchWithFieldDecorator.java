@@ -42,4 +42,8 @@ public class SearchWithFieldDecorator extends DefaultFieldDecorator {
 				|| field.getAnnotation(FindAll.class) != null || field.getAnnotation(SearchWith.class) != null
 				|| field.getAnnotation(SearchAll.class) != null;
 	}
+
+	public String getPageName() {
+		return this.getClass().getName();
+	}
 }

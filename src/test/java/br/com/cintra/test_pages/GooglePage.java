@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import br.com.cintra.helper.page.PageBuilder;
 import br.com.cintra.interfaces.annotation.element.SearchAll;
+import br.com.cintra.interfaces.annotation.element.SearchWith;
 import br.com.cintra.interfaces.annotation.page.Page;
 
 
@@ -13,6 +14,8 @@ import br.com.cintra.interfaces.annotation.page.Page;
 public class GooglePage extends PageBuilder{
 	
 	@SearchAll
-	List<WebElement> jsonElements;
+	List<WebElement> todos_os_elementos;
 	
+	@SearchWith(name = "teste")
+	List<WebElement> lista;
 }
