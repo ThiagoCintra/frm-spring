@@ -12,16 +12,21 @@ import java.util.List;
 
 import org.junit.Ignore;
 import org.openqa.selenium.By;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import br.com.cintra.helper.aop.AspectAop;
 import br.com.cintra.interfaces.annotation.element.SearchAll;
 import br.com.cintra.interfaces.annotation.element.SearchWith;
 
 public class ByType {
 
+	Logger logger = LoggerFactory.getLogger(ByType.class);
+	
 	SearchWith search;
 	SearchAll searchall;
 	String pageName;
@@ -29,28 +34,35 @@ public class ByType {
 	public ByType(SearchWith search, String pageName) {
 		this.search = search;
 		this.pageName = pageName;
+		logger.info("Search  ["+search+"]");
+		logger.info("Page Name  ["+pageName+"]");
 	}
 
 	public ByType(SearchAll searchall, String pageName) {
 		this.searchall = searchall;
 		this.pageName = pageName;
+		logger.info("Search  ["+searchall+"]");
+		logger.info("Page Name  ["+pageName+"]");
 	}
 
 	public ByType(String pageName) {
 		this.pageName = pageName;
+		logger.info("Page Name  ["+pageName+"]");
 	}
 
 	public By by() {
 		Preconditions.checkArgument(search != null, "Failed to locate the annotation @SearchWith");
 		String elementName = search.name();
 		String locatorsFile;
-
+		logger.info("Element Name  ["+elementName+"]");
 		if (search.locatorsFile().isEmpty()) {
 			locatorsFile = pageName;
 		} else {
 			locatorsFile = search.locatorsFile();
 		}
-
+		
+		logger.info("Locators File  ["+locatorsFile+"]");
+		
 		Preconditions.checkArgument(isNotNullAndEmpty(elementName), "Element name is not found.");
 		Preconditions.checkArgument(isNotNullAndEmpty(locatorsFile), "Locators File name not provided");
 		Preconditions.checkArgument(getFileInstantiete().get(locatorsFile).exists(),
@@ -60,11 +72,14 @@ public class ByType {
 
 			Iterator<JsonElement> iterator = getJsonIterator(locatorsFile);
 			JsonObject foundObject = null;
-
+			
+			logger.info("Searching for object in json");
+			
 			while (iterator.hasNext()) {
 				JsonObject object = iterator.next().getAsJsonObject();
 				if (elementName.equalsIgnoreCase(object.get("name").getAsString())) {
 					foundObject = object;
+					logger.info("Found object ["+foundObject.get("name").getAsString()+"]");
 					break;
 				}
 			}
@@ -80,8 +95,11 @@ public class ByType {
 			}
 
 			String locator = foundObject.get("locator").getAsString();
-			Preconditions.checkArgument(isNotNullAndEmpty(locator), "Locator cannot be null (or) empty.");
 
+			Preconditions.checkArgument(isNotNullAndEmpty(locator), "Locator cannot be null (or) empty.");
+			
+			logger.info("Object ["+foundObject.get("name").getAsString()+"] locator type ["+locator+"]");
+			
 			return type(type, locator);
 
 		} catch (Exception e) {
@@ -91,12 +109,17 @@ public class ByType {
 	}
 
 	public By[] allBys() {
-
-		int size = getJsonArray(pageName).size();
 		int i = 0;
-		By[] bys = new By[size];
 		JsonObject object;
-
+		List<String> ignores = Arrays.asList(searchall.ignore());
+		int size = getJsonArray(pageName).size();
+		
+		if(!ignores.isEmpty() && (!ignores.contains(""))) {
+			size-=ignores.size();
+		}
+		
+		By[] bys = new By[size];
+		
 		try {
 
 			Iterator<JsonElement> iterator = getJsonIterator(pageName);
@@ -104,16 +127,20 @@ public class ByType {
 			while (iterator.hasNext()) {
 
 				object = iterator.next().getAsJsonObject();
+				String name = object.get("name").getAsString();
+				
+				if (!ignores.contains(name)) {
+					String type = getMapBy(object.get("locateUsing").getAsString());
 
-				String type = getMapBy(object.get("locateUsing").getAsString());
+					if (type == null) {
+						throw new UnsupportedOperationException("Currently is NOT supported " + type);
+					}
 
-				if (type == null) {
-					throw new UnsupportedOperationException("Currently is NOT supported " + type);
+					String locator = object.get("locator").getAsString();
+					bys[i] = type(type, locator);
+					i++;
 				}
-
-				String locator = object.get("locator").getAsString();
-				bys[i] = type(type, locator);
-				i++;
+				
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -127,57 +154,27 @@ public class ByType {
 
 	public By type(String type, String locator) {
 		if (type.equalsIgnoreCase("name")) {
-
+			logger.info("Returning [By.ByName]");
 			return new By.ByName(locator);
 
 		} else if (type.equalsIgnoreCase("id")) {
-
+			logger.info("Returning [By.ById]");
 			return new By.ById(locator);
 
 		} else if (type.equalsIgnoreCase("className")) {
-
+			logger.info("Returning [By.ByClassName]");
 			return new By.ByClassName(locator);
 
 		}
 
 		else if (type.equalsIgnoreCase("css")) {
+			logger.info("Returning [By.ByCssSelector]");
 			return new By.ByCssSelector(locator);
 		}
 
 		else {
+			logger.info("Returning [By.ByXPath]");
 			return new By.ByXPath(locator);
 		}
 	}
-
-//	public By[] allBys2() {
-//
-//		int size = getJsonArray(pageName).size();
-//		int i = 0;
-//		List<String> ignore = Arrays.asList(searchall.ignore());
-//		By[] bys = new By[size];
-//		JsonObject object;
-//
-//		try {
-//
-//			Iterator<JsonElement> iterator = getJsonIterator(pageName);
-//
-//			while (iterator.hasNext()) {
-//
-//				object = iterator.next().getAsJsonObject();
-//
-//				String type = getMapBy(object.get("locateUsing").getAsString());
-//
-//				if (type == null) {
-//					throw new UnsupportedOperationException("Currently is NOT supported " + type);
-//				}
-//
-//				String locator = object.get("locator").getAsString();
-//				bys[i] = type(type, locator);
-//				i++;
-//			}
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//		return bys;
-//	}
 }

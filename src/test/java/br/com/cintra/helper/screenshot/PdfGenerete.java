@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.BadElementException;
@@ -29,6 +33,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 @Lazy
 @Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class PdfGenerete {
 
 	private Document document = new Document();
@@ -38,13 +43,17 @@ public class PdfGenerete {
 	private static Font HEADER_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
 	private float xImg;
 	
-	@Value("#{${env.pdf.file}")
+	@Value("#{${env.pdf.file}}")
+	private String pa;
+	
 	private Path path;
 	
 	@Autowired
 	TakeScreenshot takeScreenshot;
 
-	private void createDocument(String testName) {
+	private void createDocument(String testName) throws URISyntaxException {
+		path = Paths.get(pa + testName);
+		
 		if (!Files.exists(path)) {
 			try {
 				Files.createDirectories(path);
@@ -56,7 +65,7 @@ public class PdfGenerete {
 			document.setPageSize(PageSize.A4.rotate());
 
 			try {
-				PdfWriter.getInstance(document, new FileOutputStream(path + testName + ".pdf"));
+				PdfWriter.getInstance(document, new FileOutputStream(path + ".pdf"));
 			} catch (DocumentException e) {
 				e.printStackTrace();
 			}
@@ -102,7 +111,7 @@ public class PdfGenerete {
 		}
 	}
 	
-	public void createPdf(String testName) throws DocumentException, IOException, ParseException {
+	public void createPdf(String testName) throws DocumentException, IOException, ParseException, URISyntaxException {
 		createDocument(testName);
 		try {
 			constructPdf(testName);

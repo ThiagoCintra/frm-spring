@@ -12,10 +12,8 @@ import br.com.cintra.interfaces.annotation.page.Page;
 @Page(name = "googlePage")
 @Scope("prototype")
 public class GooglePage extends PageBuilder{
+		
+	@SearchAll(ignore = {"teste"})
+	List<WebElement> todos_os_elementos_ignorando_elementos;
 	
-	@SearchAll
-	List<WebElement> todos_os_elementos;
-	
-	@SearchWith(name = "teste")
-	List<WebElement> lista;
 }

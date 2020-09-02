@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import br.com.cintra.Application;
+import br.com.cintra.helper.screenshot.PdfGenerete;
 import br.com.cintra.interfaces.annotation.selenium.SeleniumTest;
 import br.com.cintra.test_pages.HomePage;
 import br.com.cintra.test_steps.GoggleSteps;
@@ -22,11 +23,15 @@ public class GoogleTest {
 
 	@Autowired
 	GoggleSteps googleSteps;
+	
+	@Autowired
+	PdfGenerete pdf;
 
 	@Test
 	public void pesquisaGooglePageFactory() throws Exception {
 		googleSteps.init().executeStep("acesso a page do google e digito")
 		  .executeStep("campo de deve conter texto");
+		
 	}
 	
 	@Test

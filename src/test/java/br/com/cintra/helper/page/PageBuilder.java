@@ -5,10 +5,12 @@ import static br.com.cintra.helper.test.TestHelper.getDriver;
 import static br.com.cintra.helper.test.TestHelper.getFactory;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.assertj.core.util.Arrays;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -107,16 +109,17 @@ public abstract class PageBuilder {
 	}
 
 	@PageAop
-	public WebElement getElementInList(String nameOfList, String attribte,String value) {
+	public WebElement getElementInList(String nameOfList, String attribte, String value) {
+
 		try {
 			Field list = this.getClass().getDeclaredField(nameOfList);
 			list.setAccessible(true);
-			
+
 			@SuppressWarnings("unchecked")
 			List<WebElement> sameType = (List<WebElement>) field.get(this);
 
 			for (WebElement element : sameType) {
-				if(element.getAttribute(attribte).equals(value)) {
+				if (element.getAttribute(attribte).equals(value)) {
 					return element;
 				}
 			}
@@ -132,18 +135,18 @@ public abstract class PageBuilder {
 		}
 		return null;
 	}
-	
+
 	@PageAop
 	public WebElement getElementInList(String nameOfList, String text) {
 		try {
 			Field list = this.getClass().getDeclaredField(nameOfList);
 			list.setAccessible(true);
-			
+
 			@SuppressWarnings("unchecked")
 			List<WebElement> sameType = (List<WebElement>) field.get(this);
 
 			for (WebElement element : sameType) {
-				if(element.getText().equals(text)) {
+				if (element.getText().equals(text)) {
 					return element;
 				}
 			}
@@ -229,18 +232,29 @@ public abstract class PageBuilder {
 
 		Field[] fields = this.getClass().getDeclaredFields();
 		SearchAll searchAll = null;
+		List<Object> ignores = null;
 
 		for (Field field : fields) {
+			
 			if (searchAll == null) {
 				searchAll = field.getAnnotation(SearchAll.class);
 				this.field = field;
+			
+			}else {
+				
+				if(field.getAnnotation(SearchAll.class)!=null) {
+					throw new Exception("Only one variable is supported with the annotation @SearchAll ["+this.getClassName()+"]");
+				}
+				
 			}
+			
 		}
 
 		if (searchAll != null) {
 			try {
 				field.setAccessible(true);
 				listElements = (List<WebElement>) field.get(this);
+				ignores = Arrays.asList(searchAll.ignore());
 			} catch (SecurityException e) {
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
@@ -250,22 +264,12 @@ public abstract class PageBuilder {
 			}
 
 			if ((pageName != null) && (!pageName.equals(""))) {
-
-				int count = 0;
-
-				Iterator<JsonElement> iterator = getJsonIterator(pageName);
-
-				while (iterator.hasNext()) {
-					JsonObject object = iterator.next().getAsJsonObject();
-					if (mapOfElements.get(object.get("name").getAsString()) == null) {
-						mapOfElements.put(object.get("name").getAsString(), listElements.get(count));
-						count++;
-					} else {
-						throw new Exception("Duplicate element in json file [ " + pageName + " ] with the name [ "
-								+ object.get("name").getAsString() + " ]");
-					}
-
+				if (ignores.contains("") || ignores == null) {
+					putInMap();
+				} else {
+					putInMapIgnoreElements(ignores);
 				}
+
 			}
 		}
 	}
@@ -274,6 +278,47 @@ public abstract class PageBuilder {
 	public PageBuilder takeScreenshot(String screenshotName) {
 		screenshot.takeScreenshot(screenshotName);
 		return this;
+	}
+
+	// populate MAP of elements , if SearchAll not contains ignore
+	public void putInMap() throws Exception {
+		
+		Iterator<JsonElement> iterator = getJsonIterator(pageName);
+		int count = 0;
+		
+		while (iterator.hasNext()) {
+			JsonObject object = iterator.next().getAsJsonObject();
+
+			if (mapOfElements.get(object.get("name").getAsString()) == null) {
+				mapOfElements.put(object.get("name").getAsString(), listElements.get(count));
+				count++;
+			} else {
+				throw new Exception("Duplicate element in json file [ " + pageName + " ] with the name [ "
+						+ object.get("name").getAsString() + " ]");
+			}
+
+		}
+	}
+
+	// populate MAP of elements , if SearchAll contains ignore
+	public void putInMapIgnoreElements(List<Object> ignores) throws Exception {
+		
+		Iterator<JsonElement> iterator = getJsonIterator(pageName);
+		int count = 0;
+		
+		while (iterator.hasNext()) {
+			JsonObject object = iterator.next().getAsJsonObject();
+
+			if (mapOfElements.get(object.get("name").getAsString()) == null && (!ignores.contains(object.get("name").getAsString()))) {
+				mapOfElements.put(object.get("name").getAsString(), listElements.get(count));
+				count++;
+
+			} else if (mapOfElements.get(object.get("name").getAsString()) != null) {
+				throw new Exception("Duplicate element in json file [ " + pageName + " ] with the name [ "
+						+ object.get("name").getAsString() + " ]");
+			}
+
+		}
 	}
 
 	public String getClassName() {
