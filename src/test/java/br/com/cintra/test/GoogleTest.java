@@ -23,9 +23,7 @@ public class GoogleTest {
 
 	@Autowired
 	GoggleSteps googleSteps;
-	
-	@Autowired
-	PdfGenerete pdf;
+
 
 	@Test
 	public void pesquisaGooglePageFactory() throws Exception {
