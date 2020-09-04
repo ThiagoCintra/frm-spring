@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import br.com.cintra.helper.element.scroll.ScrollToElement;
 import br.com.cintra.helper.screenshot.TakeScreenshot;
 import br.com.cintra.interfaces.annotation.aop.log.clazz.PageAop;
 import br.com.cintra.interfaces.annotation.element.SearchAll;
@@ -36,6 +37,9 @@ public abstract class PageBuilder {
 
 	@Autowired
 	private TakeScreenshot screenshot;
+	
+	@Autowired
+	ScrollToElement scrollToElement;
 
 	@Override
 	public String toString() {
@@ -214,6 +218,7 @@ public abstract class PageBuilder {
 	@PageAop
 	public PageBuilder buildPage() {
 		PageFactory.initElements(getDriver(), this);
+		scrollToElement.setsetJavascriptExecutor(getDriver());
 		return this;
 	}
 
@@ -223,6 +228,7 @@ public abstract class PageBuilder {
 		this.pageName = page.name();
 		PageFactory.initElements(getFactory(), this);
 		initElements();
+		scrollToElement.setsetJavascriptExecutor(getDriver());
 		return this;
 	}
 
@@ -278,6 +284,25 @@ public abstract class PageBuilder {
 	public PageBuilder takeScreenshot(String screenshotName) {
 		screenshot.takeScreenshot(screenshotName);
 		return this;
+	}
+	
+	@PageAop
+	public PageBuilder scrollToElement(WebElement element) {
+		scrollToElement.scrollToElement(element);
+		return this;
+	}
+	
+	@PageAop
+	public PageBuilder scrollToElement(String name) {
+		try {
+			scrollToElement.scrollToElement(mapOfElements.get(name));
+			return this;
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			throw new NullPointerException(
+					"element not find using this name [ " + name + " ] in json file [ " + pageName + " ]");
+		}
+		
 	}
 
 	// populate MAP of elements , if SearchAll not contains ignore

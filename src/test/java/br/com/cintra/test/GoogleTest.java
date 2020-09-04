@@ -23,17 +23,14 @@ public class GoogleTest {
 
 	@Autowired
 	GoggleSteps googleSteps;
+	
+	@Autowired
+	PdfGenerete pdf;
 
-
-	@Test
-	public void pesquisaGooglePageFactory() throws Exception {
-		googleSteps.init().executeStep("acesso a page do google e digito")
-		  .executeStep("campo de deve conter texto");
-		
-	}
 	
 	@Test
 	public void pesquisaGoogleModifyPageFactory() throws Exception {
 		googleSteps.init().executeStep("google page enviar texto");
+		pdf.createPdf("pesquisaGoogleModifyPageFactory");
 	}
 }
