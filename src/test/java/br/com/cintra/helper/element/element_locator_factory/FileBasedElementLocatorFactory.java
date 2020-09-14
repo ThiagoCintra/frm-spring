@@ -18,7 +18,8 @@ public class FileBasedElementLocatorFactory implements ElementLocatorFactory {
 	}
 
 	public ElementLocator createLocator(Field field) {
-		Page p = field.getDeclaringClass().getAnnotation(Page.class);
-		return new FileBasedElementLocator(searchContext, new CustomAnnotations(field,p.name()));
+
+		Page page = field.getDeclaringClass().getAnnotation(Page.class);
+		return new FileBasedElementLocator(searchContext, new CustomAnnotations(field, page.name()));
 	}
 }

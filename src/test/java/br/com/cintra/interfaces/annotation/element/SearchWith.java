@@ -8,9 +8,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface SearchWith {
-	 
-    String locatorsFile() default "";
- 
-    String name() default "";
+    
+	String locatorsFile() default "";
+    String name();
     
 }

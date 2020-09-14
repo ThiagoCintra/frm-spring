@@ -3,5 +3,10 @@
     "name": "cmpPesquisa",
     "locateUsing": "xpath",
     "locator": "//input[@name='q']"
+  },
+  {
+    "name": "teste",
+    "locateUsing": "xpath",
+    "locator": "//a"
   }
 ]
