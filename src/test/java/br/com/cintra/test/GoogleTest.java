@@ -17,7 +17,7 @@ import br.com.cintra.test_steps.GoggleSteps;
 @SpringBootTest(classes = Application.class)
 @SeleniumTest(driver = ChromeDriver.class, 
 				driverExe = "webdriver.chrome.driver", 
-				drivePath = "C:\\chromedriver.exe", baseUrl = "https://google.com.br")
+				drivePath = "E:\\Projects\\chromedriver.exe", baseUrl = "https://google.com.br")
 
 public class GoogleTest {
 
