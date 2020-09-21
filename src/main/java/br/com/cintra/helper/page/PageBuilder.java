@@ -6,11 +6,11 @@ import static br.com.cintra.helper.test.TestHelper.getFactory;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.assertj.core.util.Arrays;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -238,7 +238,7 @@ public abstract class PageBuilder {
 
 		Field[] fields = this.getClass().getDeclaredFields();
 		SearchAll searchAll = null;
-		List<Object> ignores = null;
+		List<String> ignores = null;
 
 		for (Field field : fields) {
 			
@@ -326,7 +326,7 @@ public abstract class PageBuilder {
 	}
 
 	// populate MAP of elements , if SearchAll contains ignore
-	public void putInMapIgnoreElements(List<Object> ignores) throws Exception {
+	public void putInMapIgnoreElements(List<String> ignores) throws Exception {
 		
 		Iterator<JsonElement> iterator = getJsonIterator(pageName);
 		int count = 0;

@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import br.com.cintra.Application;
 import br.com.cintra.helper.screenshot.PdfGenerete;
-import br.com.cintra.interfaces.annotation.selenium.SeleniumTest;
+import br.com.cintra.interfaces.annotation.type_test.selenium.SeleniumTest;
 import br.com.cintra.test_steps.GoogleSteps;
 
 @RunWith(SpringRunner.class)

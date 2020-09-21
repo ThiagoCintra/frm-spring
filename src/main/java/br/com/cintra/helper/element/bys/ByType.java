@@ -5,12 +5,10 @@ import static br.com.cintra.helper.element.files.JsonFiles.getFileInstantiete;
 import static br.com.cintra.helper.element.files.JsonFiles.getJsonArray;
 import static br.com.cintra.helper.element.files.JsonFiles.getJsonIterator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

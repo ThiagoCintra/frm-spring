@@ -12,11 +12,10 @@ import org.springframework.core.Ordered;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 
-
 import br.com.cintra.helper.element.element_locator_factory.FileBasedElementLocatorFactory;
 import br.com.cintra.helper.element.search.SearchWithFieldDecorator;
 import br.com.cintra.helper.screenshot.PdfGenerete;
-import br.com.cintra.interfaces.annotation.selenium.SeleniumTest;
+import br.com.cintra.interfaces.annotation.type_test.selenium.SeleniumTest;
 
 import static br.com.cintra.helper.test.TestHelper.setCurrentTest;
 import static br.com.cintra.helper.test.TestHelper.setDriver;
