@@ -270,6 +270,7 @@ public abstract class PageBuilder {
 			}
 
 			if ((pageName != null) && (!pageName.equals(""))) {
+				mapOfElements.clear();
 				if (ignores.contains("") || ignores == null) {
 					putInMap();
 				} else {

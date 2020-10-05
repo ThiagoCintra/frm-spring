@@ -28,8 +28,15 @@ public class GoogleTest {
 
 	
 	@Test
-	public void pesquisaGoogleModifyPageFactory() throws Exception {
+	public void pesquisaGoogleModifyPageFactory1() throws Exception {
 		googleSteps.init().executeStep("google page enviar texto");
 		pdf.createPdf("pesquisaGoogleModifyPageFactory");
 	}
+	
+	@Test
+	public void pesquisaGoogleModifyPageFactory2() throws Exception {
+		googleSteps.init().executeStep("google page enviar texto");
+		pdf.createPdf("pesquisaGoogleModifyPageFactory");
+	}
+	
 }

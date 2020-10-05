@@ -20,25 +20,28 @@ public abstract class StepsBuilder {
 	HashMap<String, Method> mapMethod = new HashMap<String, Method>();
 	Step stepAnnotation = null;
 	Method method;
-	
+	private boolean init = false;
 
-	
-	
 	@StepAop
 	public StepsBuilder init() throws Exception {
-		methods = this.getClass().getDeclaredMethods();
-		for (Method m : methods) {
-			annotations = m.getAnnotations();
-			for (Annotation a : annotations) {
-				if (a.toString().contains("Step")) {
-					stepAnnotation = (Step) a;
-					if(mapMethod.get(stepAnnotation.name()) != null) {
-						throw new Exception();
+
+		if (init == false) {
+			methods = this.getClass().getDeclaredMethods();
+			for (Method m : methods) {
+				annotations = m.getAnnotations();
+				for (Annotation a : annotations) {
+					if (a.toString().contains("Step")) {
+						stepAnnotation = (Step) a;
+						if (mapMethod.get(stepAnnotation.name()) != null) {
+							throw new Exception();
+						}
+						mapMethod.put(stepAnnotation.name(), m);
 					}
-					mapMethod.put(stepAnnotation.name(), m);
+
 				}
 
 			}
+			init = true;
 		}
 		return this;
 	}
@@ -63,7 +66,7 @@ public abstract class StepsBuilder {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getClass().getName();
