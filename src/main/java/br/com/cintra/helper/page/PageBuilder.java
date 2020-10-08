@@ -202,16 +202,16 @@ public abstract class PageBuilder {
 	}
 
 	@PageAop
-	public PageBuilder waitUntilElementToBeClickble(WebElement element, int time) {
+	public PageBuilder waitUntilElementToBeClickable(WebElement element, int time) {
 		wait = new WebDriverWait(getDriver(), time);
-		wait.until(ExpectedConditions.invisibilityOf(element));
+		wait.until(ExpectedConditions.visibilityOf(element));
 		return this;
 	}
 
 	@PageAop
-	public PageBuilder waitUntilElementToBeClickble(String element, int time) {
+	public PageBuilder waitUntilElementToBeClickable(String element, int time) {
 		wait = new WebDriverWait(getDriver(), time);
-		wait.until(ExpectedConditions.invisibilityOf(mapOfElements.get(element)));
+		wait.until(ExpectedConditions.visibilityOf(mapOfElements.get(element)));
 		return this;
 	}
 
