@@ -1,0 +1,17 @@
+[
+  {
+    "name": "btnFormulario",
+    "locateUsing": "xpath",
+    "locator": "//a[text()='Formulário']"
+  },
+  {
+    "name": "btnCriarUsario",
+    "locateUsing": "xpath",
+    "locator": "//a[text()='Criar Usuários']"
+  },
+  {
+    "name": "btnBuscarUsuario",
+    "locateUsing": "xpath",
+    "locator": "//a[text()='Busca de elementos']"
+  }
+]

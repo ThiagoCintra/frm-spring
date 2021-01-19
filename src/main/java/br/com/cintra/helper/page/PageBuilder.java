@@ -81,6 +81,24 @@ public abstract class PageBuilder {
 		}
 		return this;
 	}
+	
+	@PageAop
+	public PageBuilder clear(WebElement element) {
+		element.clear();
+		return this;
+	}
+	
+	@PageAop
+	public PageBuilder clear(String name) {
+		try {
+			mapOfElements.get(name).clear();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			throw new NullPointerException(
+					"element not find using this name [ " + name + " ] in json file [ " + pageName + " ]");
+		}
+		return this;
+	}
 
 	@PageAop
 	public PageBuilder getText(WebElement element) {

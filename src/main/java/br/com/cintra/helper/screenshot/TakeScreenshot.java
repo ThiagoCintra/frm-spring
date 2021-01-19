@@ -19,24 +19,26 @@ import java.util.LinkedHashMap;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class TakeScreenshot {
 
-	LinkedHashMap<String, LinkedHashMap<String, BufferedImage>> scenarioScreenshot = new LinkedHashMap<String, LinkedHashMap<String, BufferedImage>>();
+	private LinkedHashMap<String, LinkedHashMap<String, BufferedImage>> scenarioScreenshot = new LinkedHashMap<String, LinkedHashMap<String, BufferedImage>>();
+	private Screenshot screenshot;
 	
 	public void takeScreenshot(String name) {
-		if(scenarioScreenshot.get(getCurrentTest())==null) {
+		if (scenarioScreenshot.get(getCurrentTest()) == null) {
 			scenarioScreenshot.put(getCurrentTest(), new LinkedHashMap<String, BufferedImage>());
 		}
-		 Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(getDriver());
-		 scenarioScreenshot.get(getCurrentTest()).put(name, screenshot.getImage());
+		screenshot = null;
+		screenshot = new AShot().takeScreenshot(getDriver());
+		scenarioScreenshot.get(getCurrentTest()).put(name, screenshot.getImage());
 	}
 
 	public HashMap<String, BufferedImage> getBufferImageMap(String key) {
 		return scenarioScreenshot.get(key);
 	}
-	
+
 	public void clearCurrentScenarioScreenshot(String key) {
 		scenarioScreenshot.get(key).clear();
 	}
-	
+
 	public void clearAllScenarioScreenshot(String key) {
 		scenarioScreenshot.clear();
 	}

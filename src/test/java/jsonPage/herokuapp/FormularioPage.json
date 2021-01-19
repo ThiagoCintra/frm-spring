@@ -1,0 +1,22 @@
+[
+  {
+    "name": "txtNome",
+    "locateUsing": "id",
+    "locator": "user_name"
+  },
+  {
+    "name": "txtUltimoNome",
+    "locateUsing": "id",
+    "locator": "user_lastname"
+  },
+  {
+    "name": "txtEmail",
+    "locateUsing": "id",
+    "locator": "user_email"
+  },
+   {
+    "name": "txtEndero",
+    "locateUsing": "id",
+    "locator": "user_address"
+  }
+]

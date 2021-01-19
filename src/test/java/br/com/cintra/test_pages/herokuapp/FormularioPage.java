@@ -1,4 +1,4 @@
-package br.com.cintra.test_pages;
+package br.com.cintra.test_pages.herokuapp;
 
 import java.util.List;
 import org.openqa.selenium.WebElement;
@@ -8,11 +8,11 @@ import br.com.cintra.interfaces.annotation.element.SearchAll;
 import br.com.cintra.interfaces.annotation.element.SearchWith;
 import br.com.cintra.interfaces.annotation.page.Page;
 
-@Page(name = "googlePage")
+@Page(name = "formularioPage")
 @Scope("prototype")
-public class GooglePage extends PageBuilder{
+public class FormularioPage extends PageBuilder{
 		
-	@SearchAll(ignore = {"teste"})
+	@SearchAll()
 	List<WebElement> todos_os_elementos_ignorando_elementos;
 	
 }

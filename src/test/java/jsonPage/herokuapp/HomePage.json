@@ -1,0 +1,12 @@
+[
+  {
+    "name": "btnAutomacaoWeb",
+    "locateUsing": "xpath",
+    "locator": "//a[text()='Começar Automação Web']"
+  },
+  {
+    "name": "btnAutomacaoApi",
+    "locateUsing": "xpath",
+    "locator": "//a[text()='Começar Automação de Api']"
+  }
+]
