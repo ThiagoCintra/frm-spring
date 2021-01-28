@@ -20,5 +20,9 @@ import br.com.cintra.execute.ApiTestExecutionListener;
         listeners = ApiTestExecutionListener.class,
         mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 public @interface ApiTest {
-	String baseUrl() default "";
+	
+	String baseUri() default "";
+	String basePort() default "";
+	String jsonFile () default "";
+	
 }
