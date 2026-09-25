@@ -1,64 +1,147 @@
-# frm-spring — contexto completo para manutenção por outra IA
+# frm-spring — projeto inteiro em um único arquivo
 
-## Objetivo deste arquivo
+Este arquivo foi solicitado para fornecer o projeto completo a outra IA em uma única entrada. Cada seção abaixo corresponde a um arquivo original e preserva seu caminho relativo. Não edite apenas este documento para corrigir o software: use os caminhos dos títulos para reconstruir ou alterar os arquivos originais.
 
-Este documento consolida, em um único arquivo, o contexto necessário para entender e corrigir o repositório `ThiagoCintra/frm-spring`. Ele contém a visão arquitetural, o fluxo de execução, a configuração, os pontos conhecidos de atenção e o conteúdo textual dos arquivos-fonte relevantes. Os diretórios gerados (`target/`) e metadados específicos da IDE foram omitidos porque não fazem parte do código-fonte necessário para manutenção.
+## Inventário incluído
 
-## Resumo do projeto
+Arquivos versionados e artefatos presentes em `target/` no momento da consolidação. O próprio `PROJECT_CONTEXT.md` foi excluído para evitar recursão. Arquivos binários são representados em Base64 e devem ser decodificados para recuperar os bytes originais.
 
-O projeto é um framework Java/Spring Boot para automação de testes web com Selenium. Ele combina:
+Arquivos incluídos: 46
 
-- Spring Boot 2.3.1 e Spring AOP para descoberta/injeção de componentes e interceptação de métodos.
-- Anotações próprias para declarar páginas, etapas (`steps`), elementos e tipos de teste.
-- Page Object Model baseado em arquivos JSON que mapeiam nomes lógicos de elementos para seletores Selenium.
-- `PageBuilder` fluente para localizar elementos, clicar, preencher campos, selecionar opções, rolar e capturar screenshots.
-- `StepsBuilder` para executar métodos privados anotados com `@Step` pelo nome da etapa.
-- Listeners JUnit/Spring para inicializar e encerrar drivers Selenium e preparar testes de API.
-- Geração de screenshots e PDF como evidência de execução.
+## Visão rápida do projeto
 
-## Como o fluxo Selenium funciona
+É um framework Java/Spring Boot para automação de testes web com Selenium. O código principal está em `src/main/java`, os recursos em `src/main/resources` e o exemplo de integração em `src/test`. O build usa Maven (`pom.xml`), Java 8, Spring Boot 2.3.1 e Selenium 3.141.59. O fluxo principal usa anotações próprias (`@Page`, `@Steps`, `@Step`, `@SearchWith`, `@SearchAll`, `@SeleniumTest`), Page Objects definidos por JSON, `PageBuilder`, `StepsBuilder`, listeners de execução e componentes de screenshot/PDF.
 
-1. `Application` inicia o contexto Spring e habilita execução assíncrona.
-2. Uma classe de teste usa `@SpringBootTest` e `@SeleniumTest`, informando driver, propriedade do executável e URL base.
-3. `SeleniumTestExecutionListener` lê a anotação e cria/configura o `WebDriver` antes do teste; ao terminar, encerra o driver e gera evidências quando configurado.
-4. Classes de página anotadas com `@Page` são beans Spring. Seus campos anotados com `@SearchWith` ou `@SearchAll` recebem elementos decorados a partir do JSON configurado em `application.properties`.
-5. Uma classe anotada com `@Steps` estende `StepsBuilder`; cada método anotado com `@Step(name = ...)` representa uma ação executável por nome.
-6. `HerokuappStep` encadeia ações em páginas, e `PageBuilder` delega operações ao Selenium.
-7. `AspectAop` registra/mede métodos anotados com `@StepAop` e `@PageAop`.
+## Como usar este conteúdo
 
-## Estrutura principal
+1. Separe cada seção pelo título de caminho.
+2. Grave o conteúdo do bloco no mesmo caminho relativo.
+3. Para blocos `base64`, decodifique o conteúdo em bytes; eles são artefatos gerados, não código-fonte.
+4. Execute `mvn test` ou `mvn package` após reconstruir o projeto; o teste Selenium de exemplo exige ChromeDriver e acesso externo.
+5. Revise caminhos Windows, versões antigas de Selenium/Spring e configurações locais antes de corrigir problemas de execução.
 
-- `src/main/java/br/com/cintra/Application.java`: ponto de entrada Spring Boot.
-- `interfaces/annotation`: contrato das anotações públicas do framework.
-- `helper/page/PageBuilder.java`: API fluente de interação com páginas e elementos.
-- `helper/step/StepsBuilder.java`: resolução e execução de etapas por nome.
-- `helper/element`: localização, decoração, parsing de JSON, tipos de seletor e scroll.
-- `helper/screenshot`: screenshot e PDF.
-- `execute`: listeners de execução e processamento de beans.
-- `src/main/resources/application.properties`: mapeamento de arquivos JSON e configuração de evidências.
-- `src/test`: exemplo funcional contra `automacaocombatista.herokuapp.com`.
+## Conteúdo completo dos arquivos
 
-## Build e execução
+### `.classpath`
 
-Requisitos esperados: JDK 8, Maven, navegador Chrome e ChromeDriver compatível.
+```text
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
+```
 
-- Compilar e executar testes: `mvn test`
-- Empacotar: `mvn package`
-- A execução Selenium depende de ChromeDriver local e de acesso à URL externa; ajuste `drivePath`, `webdriver.chrome.driver` e `baseUrl` na anotação do teste ou em configuração equivalente.
-- Os caminhos dos JSON estão configurados como relativos ao diretório de execução e usam separadores Windows; isso deve ser revisado para execução multiplataforma.
+### `.gitignore`
 
-## Pontos de atenção para a próxima IA
+```text
+/target/
+```
 
-- Verificar compatibilidade entre JDK, Spring Boot, Selenium 3 e ChromeDriver atual.
-- Não expor credenciais, tokens ou dados pessoais ao documentar/configurar o projeto; valores sensíveis desta consolidação foram mascarados.
-- Corrigir caminhos hard-coded Windows (`C:\Projects`, `src\test\...`) para configuração portátil quando essa for a causa do problema.
-- Confirmar lifecycle do `WebDriver`, escopo dos beans e comportamento concorrente antes de alterar listeners ou `PageBuilder`.
-- Preservar os nomes dos elementos usados nos JSON e os nomes das etapas usados em `HerokuappStep`, salvo se todos os consumidores forem atualizados.
-- O teste de exemplo é um teste de integração externo, não um teste unitário isolado; falhas de rede, site ou driver podem não indicar regressão no framework.
+### `.project`
 
-## Arquivos-fonte consolidados
+```text
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>automation-framework-spring-boot</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+	</natures>
+</projectDescription>
+```
 
-Cada seção abaixo reproduz o conteúdo textual do arquivo indicado no estado atual do repositório. Para corrigir o projeto, a outra IA deve tratar o caminho exibido no título como o caminho original do arquivo.
+### `.settings/org.eclipse.core.resources.prefs`
+
+```properties
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/test/java=UTF-8
+encoding//src/test/java/jsonPage/herokuapp/FormularioPage.json=UTF-8
+encoding//src/test/java/jsonPage/herokuapp/HomePage.json=UTF-8
+encoding//src/test/java/jsonPage/herokuapp/ListaDeFuncionalidade.json=UTF-8
+encoding//src/test/resources=UTF-8
+encoding/<project>=UTF-8
+```
+
+### `.settings/org.eclipse.jdt.core.prefs`
+
+```properties
+eclipse.preferences.version=1
+org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
+org.eclipse.jdt.core.compiler.codegen.methodParameters=generate
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.5
+org.eclipse.jdt.core.compiler.codegen.unusedLocal=preserve
+org.eclipse.jdt.core.compiler.compliance=1.5
+org.eclipse.jdt.core.compiler.debug.lineNumber=generate
+org.eclipse.jdt.core.compiler.debug.localVariable=generate
+org.eclipse.jdt.core.compiler.debug.sourceFile=generate
+org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures=disabled
+org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
+org.eclipse.jdt.core.compiler.problem.forbiddenReference=warning
+org.eclipse.jdt.core.compiler.problem.reportPreviewFeatures=ignore
+org.eclipse.jdt.core.compiler.release=disabled
+org.eclipse.jdt.core.compiler.source=1.5
+```
+
+### `.settings/org.eclipse.m2e.core.prefs`
+
+```properties
+activeProfiles=
+eclipse.preferences.version=1
+resolveWorkspaceProjects=true
+version=1
+```
+
+### `debug.log` (binário; Base64)
+
+```base64
+WzEyMjIvMTAxOTMwLjA1NjpFUlJPUjpkaXJlY3RvcnlfcmVhZGVyX3dpbi5jYyg0MyldIEZpbmRGaXJzdEZpbGU6IE8gc2lzdGVtYSBu428gcG9kZSBlbmNvbnRyYXIgbyBjYW1pbmhvIGVzcGVjaWZpY2Fkby4gKDB4MykKWzEyMjIvMTEyMTI1LjM1OTpFUlJPUjpkaXJlY3RvcnlfcmVhZGVyX3dpbi5jYyg0MyldIEZpbmRGaXJzdEZpbGU6IE8gc2lzdGVtYSBu428gcG9kZSBlbmNvbnRyYXIgbyBjYW1pbmhvIGVzcGVjaWZpY2Fkby4gKDB4MykKWzAxMTkvMTQwNTA3LjE3MDpFUlJPUjpkaXJlY3RvcnlfcmVhZGVyX3dpbi5jYyg0MyldIEZpbmRGaXJzdEZpbGU6IE8gc2lzdGVtYSBu428gcG9kZSBlbmNvbnRyYXIgbyBjYW1pbmhvIGVzcGVjaWZpY2Fkby4gKDB4MykKWzAxMTkvMTQxMDExLjUzMzpFUlJPUjpkaXJlY3RvcnlfcmVhZGVyX3dpbi5jYyg0MyldIEZpbmRGaXJzdEZpbGU6IE8gc2lzdGVtYSBu428gcG9kZSBlbmNvbnRyYXIgbyBjYW1pbmhvIGVzcGVjaWZpY2Fkby4gKDB4MykK
+```
 
 ### `pom.xml`
 
@@ -157,12 +240,6 @@ Cada seção abaixo reproduz o conteúdo textual do arquivo indicado no estado a
 	</build>
 
 </project>
-```
-
-### `.gitignore`
-
-```text
-/target/
 ```
 
 ### `src/main/java/br/com/cintra/Application.java`
@@ -1921,7 +1998,7 @@ public @interface SeleniumTest {
 spring.thymeleaf.cache=false
 security.basic.enabled=false
 security.user.name=user
-security.user.******
+security.user.password=<REDACTED>
 management.security.enabled=${security.basic.enabled}
 file.init.jsonfile-map={homePage:"src\\test\\java\\jsonPage\\herokuapp\\HomePage.json", \
 							listaDeFuncionalidade:"src\\test\\java\\jsonPage\\herokuapp\\ListaDeFuncionalidade.json", \
@@ -2143,4 +2220,24 @@ public class HerokuappStep extends StepsBuilder {
     "locator": "//a[text()='Busca de elementos']"
   }
 ]
+```
+
+### `target/classes/application.properties`
+
+```properties
+spring.thymeleaf.cache=false
+security.basic.enabled=false
+security.user.name=user
+security.user.password=<REDACTED>
+management.security.enabled=${security.basic.enabled}
+file.init.jsonfile-map={homePage:"src\\test\\java\\jsonPage\\herokuapp\\HomePage.json", \
+							listaDeFuncionalidade:"src\\test\\java\\jsonPage\\herokuapp\\ListaDeFuncionalidade.json", \
+							formularioPage:"src\\test\\java\\jsonPage\\herokuapp\\FormularioPage.json"}
+env.pdf.file = "C:\\Projects\\"
+```
+
+### `target/classes/br/com/cintra/Application.class` (binário; Base64)
+
+```base64
+yv66vgAAADEAHwcAAgEAGWJyL2NvbS9jaW50cmEvQXBwbGljYXRpb24HAAQBABBqYXZhL2xhbmcvT2JqZWN0AQAGPGluaXQ+AQADKClWAQAEQ29kZQoAAwAJDAAFAAYBAA9MaW5lTnVtYmVyVGFibGUBABJMb2NhbFZhcmlhYmxlVGFibGUBAAR0aGlzAQAbTGJyL2NvbS9jaW50cmEvQXBwbGljYXRpb247AQAEbWFpbgEAFihbTGphdmEvbGFuZy9TdHJpbmc7KVYHABEBABBqYXZhL2xhbmcvU3RyaW5nCgATABUHABQBACpvcmcvc3ByaW5nZnJhbWV3b3JrL2Jvb3QvU3ByaW5nQXBwbGljYXRpb24MABYAFwEAA3J1bgEAYihMamF2YS9sYW5nL0NsYXNzO1tMamF2YS9sYW5nL1N0cmluZzspTG9yZy9zcHJpbmdmcmFtZXdvcmsvY29udGV4dC9Db25maWd1cmFibGVBcHBsaWNhdGlvbkNvbnRleHQ7AQAEYXJncwEAE1tMamF2YS9sYW5nL1N0cmluZzsBAApTb3VyY2VGaWxlAQAQQXBwbGljYXRpb24uamF2YQEAGVJ1bnRpbWVWaXNpYmxlQW5ub3RhdGlvbnMBAD5Mb3JnL3NwcmluZ2ZyYW1ld29yay9ib290L2F1dG9jb25maWd1cmUvU3ByaW5nQm9vdEFwcGxpY2F0aW9uOwEAN0xvcmcvc3ByaW5nZnJhbWV3b3JrL3NjaGVkdWxpbmcvYW5ub3RhdGlvbi9FbmFibGVBc3luYzsAIQABAAMAAAAAAAIAAQAFAAYAAQAHAAAALwABAAEAAAAFKrcACLEAAAACAAoAAAAGAAEAAAAJAAsAAAAMAAEAAAAFAAwADQAAAAkADgAPAAEABwAAADkAAgABAAAACxIBA70AELgAElexAAAAAgAKAAAACgACAAAADAAKAA0ACwAAAAwAAQAAAAsAGAAZAAAAAgAaAAAAAgAbABwAAAAKAAIAHQAAAB4AAA==
 ```
